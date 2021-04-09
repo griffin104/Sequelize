@@ -5,6 +5,7 @@ async function windowActions() {
     let meals = await getMeals(mealIds)
     let macros = await getMacros(mealIds)
 
+    // Sorting meals and macros array to assure same order
     meals.sort(function(a,b) {
         return a.meal_id - b.meal_id
     })
@@ -17,15 +18,8 @@ async function windowActions() {
     displayDiningHalls()
 }
 
-function findMealName(meals, mealId) {
-    meals.forEach(meal => {
-        if (meal.meal_id == mealId) {
-            return meal.meal_name
-        }
-    })
-}
 
-
+// Gets 10 random meal IDs without repeat
 function getMealIds() {
     let mealIds = []
     let curr
@@ -41,6 +35,7 @@ function getMealIds() {
     return mealIds
 }
 
+// Returns array of meals based on their ID
 async function getMeals(mealIds) {
     let meals = []
 
@@ -53,6 +48,8 @@ async function getMeals(mealIds) {
     return meals
 }
 
+
+// Returns array of macros based on their ID
 async function getMacros(mealIds) {
     let macros = []
 
@@ -65,6 +62,8 @@ async function getMacros(mealIds) {
     return macros
 }
 
+
+// Creates CanvasJS chart
 function createChart(meals, macros) {
     chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
@@ -158,6 +157,7 @@ function createChart(meals, macros) {
     chart.render()
 }
 
+//Allows toggling of certain macros
 function toggleDataSeries(e) {
 	if(typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
 		e.dataSeries.visible = false;
@@ -167,7 +167,8 @@ function toggleDataSeries(e) {
 	}
     chart.render()
 }
- 
+
+//Gets and displays information on each dining hall
 async function displayDiningHalls() {
     const table = document.querySelector('.table-body')
     const response = await fetch("/api/dining")
